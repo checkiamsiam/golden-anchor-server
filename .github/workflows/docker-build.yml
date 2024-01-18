@@ -1,0 +1,39 @@
+name: Publish Docker Image
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    environment: Production
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Create .env file for docker
+        run: |
+         echo "NODE_ENV=production" >> .env
+         echo "DATABASE_URL=${{secrets.DATABASE_URL}}" >> .env
+         echo "CLOUDINARY_CLOUD_NAME=${{secrets.CLOUDINARY_CLOUD_NAME}}" >> .env
+         echo "CLOUDINARY_API_KEY=${{secrets.CLOUDINARY_API_KEY}}" >> .env
+         echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env
+         echo "MAILTRAP_HOST=${{secrets.MAILTRAP_HOST}}" >> .env
+         echo "MAILTRAP_PORT=${{secrets.MAILTRAP_PORT}}" >> .env
+         echo "MAILTRAP_USER=${{secrets.MAILTRAP_USER}}" >> .env
+         echo "MAILTRAP_PASSWORD=${{secrets.MAILTRAP_PASSWORD}}" >> .env
+         echo "MAILING_DOMAIN=${{secrets.MAILING_DOMAIN}}" >> .env
+         echo "MAILTRAP_SENDING_EMAIL=${{secrets.MAILTRAP_SENDING_EMAIL}}" >> .env
+         echo "ADMIN_EMAIL=${{secrets.ADMIN_EMAIL}}" >> .env
+
+      - name: Login to docker hub
+        run: echo "${{secrets.DOCKERHUB_TOKEN}}" | docker login -u "${{secrets.DOCKERHUB_USERNAME}}" --password-stdin
+
+      - name: Build Docker Image
+        run: docker build . --file Dockerfile --tag ${{secrets.DOCKERHUB_USERNAME}}/golden-anchor-server:latest
+
+      - name: Push Docker Image
+        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/golden-anchor-server:latest
