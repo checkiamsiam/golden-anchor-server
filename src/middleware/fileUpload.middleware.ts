@@ -16,7 +16,7 @@ const makeStorage = (folder: string) => {
     cloudinary: cloudinary,
     params: {
       public_id: (req, file) =>
-        `GA/${folder}/` +
+        `${folder}/` +
         Math.floor(Math.random() * 10) +
         Math.floor(Math.random() * 10) +
         file.originalname.split(" ").join("-"),
