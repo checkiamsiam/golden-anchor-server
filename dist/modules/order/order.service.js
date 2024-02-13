@@ -115,8 +115,7 @@ const getOrders = (status, queryFeatures) => __awaiter(void 0, void 0, void 0, f
         take: queryFeatures.limit || undefined,
         orderBy: queryFeatures.sort,
     };
-    if (queryFeatures.populate &&
-        Object.keys(queryFeatures.populate).length > 0) {
+    if (queryFeatures.populate && Object.keys(queryFeatures.populate).length > 0) {
         query.include = Object.assign({ _count: true }, queryFeatures.populate);
     }
     else {
@@ -124,10 +123,7 @@ const getOrders = (status, queryFeatures) => __awaiter(void 0, void 0, void 0, f
             query.select = Object.assign({ id: true }, queryFeatures.fields);
         }
     }
-    const [result, count] = yield prismaClient_1.default.$transaction([
-        prismaClient_1.default.order.findMany(query),
-        prismaClient_1.default.order.count({ where: whereConditions }),
-    ]);
+    const [result, count] = yield prismaClient_1.default.$transaction([prismaClient_1.default.order.findMany(query), prismaClient_1.default.order.count({ where: whereConditions })]);
     return {
         data: result,
         total: count,
@@ -153,8 +149,7 @@ const getMyOrders = (status, authUserId, queryFeatures) => __awaiter(void 0, voi
         take: queryFeatures.limit || undefined,
         orderBy: queryFeatures.sort,
     };
-    if (queryFeatures.populate &&
-        Object.keys(queryFeatures.populate).length > 0) {
+    if (queryFeatures.populate && Object.keys(queryFeatures.populate).length > 0) {
         query.include = Object.assign({ _count: true }, queryFeatures.populate);
     }
     else {
@@ -162,10 +157,7 @@ const getMyOrders = (status, authUserId, queryFeatures) => __awaiter(void 0, voi
             query.select = Object.assign({ id: true }, queryFeatures.fields);
         }
     }
-    const [result, count] = yield prismaClient_1.default.$transaction([
-        prismaClient_1.default.order.findMany(query),
-        prismaClient_1.default.order.count({ where: whereConditions }),
-    ]);
+    const [result, count] = yield prismaClient_1.default.$transaction([prismaClient_1.default.order.findMany(query), prismaClient_1.default.order.count({ where: whereConditions })]);
     return {
         data: result,
         total: count,
@@ -216,10 +208,9 @@ const quotationApprove = (id, quotationFilePath) => __awaiter(void 0, void 0, vo
     <h3>Quotation request approved</h3>
     <p>Hi, ${(_f = orderResponse === null || orderResponse === void 0 ? void 0 : orderResponse.customer) === null || _f === void 0 ? void 0 : _f.name}</p>
     <p>Your quotation request for order id ${orderResponse === null || orderResponse === void 0 ? void 0 : orderResponse.id} has been approved</p>
-    <p>Please check your account</p>
+    <p> <a href=${quotationFilePath}> Click here </a> to download the quotation</p>
     <p>Thank you</p>
     `,
-            attachments: [{ filename: "quotation.pdf", path: quotationFilePath }],
         });
         return orderResponse;
     }), { timeout: 20000 });
@@ -296,9 +287,7 @@ const confirmOrDeclineOrder = (id, authUserId, status) => __awaiter(void 0, void
                 id,
             },
         });
-        if (!order ||
-            order.status !== client_1.OrderStatus.quotationApproved ||
-            order.customerId !== authUserId) {
+        if (!order || order.status !== client_1.OrderStatus.quotationApproved || order.customerId !== authUserId) {
             throw new customError_util_1.default("Order you want to confirm/decline is not approved yet or already confirm or its to her/his order", http_status_1.default.NOT_FOUND);
         }
         const orderResponse = yield txc.order.update({
@@ -408,10 +397,9 @@ const invoiceUpload = (id, invoiceFilePath) => __awaiter(void 0, void 0, void 0,
   <h3>Invoice Added</h3>
   <p>Hi, ${(_u = orderResponse === null || orderResponse === void 0 ? void 0 : orderResponse.customer) === null || _u === void 0 ? void 0 : _u.name}</p>
   <p>Invoice added for your order id ${orderResponse === null || orderResponse === void 0 ? void 0 : orderResponse.id}</p>
-  <p>Please check your account</p>
+  <p> <a href=${invoiceFilePath}> Click here </a> to download the quotation</p>
   <p>Thank you</p>
   `,
-            attachments: [{ filename: "quotation.pdf", path: invoiceFilePath }],
         });
         return orderResponse;
     }), { timeout: 20000 });
