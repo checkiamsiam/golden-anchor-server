@@ -267,10 +267,9 @@ const quotationApprove = async (
     <h3>Quotation request approved</h3>
     <p>Hi, ${orderResponse?.customer?.name}</p>
     <p>Your quotation request for order id ${orderResponse?.id} has been approved</p>
-    <p>Please check your account</p>
+    <p> <a href=${quotationFilePath}> Click here </a> to download the quotation</p>
     <p>Thank you</p>
     `,
-        attachments: [{ filename: "quotation.pdf", path: quotationFilePath }],
       });
 
       return orderResponse;
@@ -504,10 +503,9 @@ const invoiceUpload = async (
   <h3>Invoice Added</h3>
   <p>Hi, ${orderResponse?.customer?.name}</p>
   <p>Invoice added for your order id ${orderResponse?.id}</p>
-  <p>Please check your account</p>
+  <p> <a href=${invoiceFilePath}> Click here </a> to download the quotation</p>
   <p>Thank you</p>
   `,
-        attachments: [{ filename: "quotation.pdf", path: invoiceFilePath }],
       });
 
       return orderResponse;
